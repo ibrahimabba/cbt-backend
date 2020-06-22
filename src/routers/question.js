@@ -4,6 +4,8 @@ const adminAuth = require('../middleware/adminAuth');
 const studentAuth = require('../middleware/auth');
 const router = new express.Router();
 
+
+//admin users can create new questions
 router.post('/questions', adminAuth, async (req, res) => {
   const question = new Question(req.body);
 
@@ -15,6 +17,7 @@ router.post('/questions', adminAuth, async (req, res) => {
   }
 });
 
+//admin user can edit a question by id
 router.patch('/questions/:id', adminAuth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
@@ -49,6 +52,8 @@ router.patch('/questions/:id', adminAuth, async (req, res) => {
     res.status(400).send(e);
   }
 });
+
+//users registers as admins can delete a single question by id
 router.delete('/questions/delete/:id', adminAuth, async (req, res) => {
   try {
     const question = await Question.findOneAndDelete({ _id: req.params.id });
@@ -63,6 +68,7 @@ router.delete('/questions/delete/:id', adminAuth, async (req, res) => {
   }
 });
 
+//users registers as admins can delete all the questions
 router.delete('/questions/deleteAll', adminAuth, async (req, res) => {
   try {
     const question = await Question.deleteMany({});
@@ -77,12 +83,20 @@ router.delete('/questions/deleteAll', adminAuth, async (req, res) => {
   }
 });
 
-router.get('/questions', studentAuth, async (req, res) => {
+//any one registerd or not can get all questions, and can filter them by subject name, topic name and by year
+router.get('/questions', async (req, res) => {
   const match = {};
   const sort = {};
 
   if (req.query.subjectName) {
     match.subjectName = req.query.subjectName;
+  }
+
+  if (req.query.topicName) {
+    match.topicName = req.query.topicName;
+  }
+  if (req.query.year) {
+    match.year = req.query.year;
   }
 
   if (req.query.sortBy) {
@@ -91,9 +105,9 @@ router.get('/questions', studentAuth, async (req, res) => {
   }
   console.log(match);
   try {
-    const list = await Question.find({ subjectName: match.subjectName })
-      .limit(parseInt(req.query.limit))
-      .skip(parseInt(req.query.skip));
+    const list = await Question.find(match)
+      .limit(parseInt(req.query.limit || 5))
+      .skip(parseInt(req.query.skip || 0));
 
     res.send(list);
   } catch (e) {

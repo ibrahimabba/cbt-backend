@@ -4,7 +4,7 @@
   "description": "backend for a Computer based test application",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "./node_modules/.bin/env-cmd -f ./config/dev.env node src/index.js",
     "dev": "./node_modules/.bin/env-cmd -f ./config/dev.env nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

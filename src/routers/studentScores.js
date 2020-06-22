@@ -5,6 +5,7 @@ const studentAuth = require('../middleware/auth');
 
 const router = new express.Router();
 
+//this end point is used to creat a student score document and it is used to icrement the score of each subject
 router.post('/scores', studentAuth, async (req, res) => {
   try {
     //here i am checking to see if the current user submitting this request is his first time submitting the request
@@ -46,8 +47,18 @@ router.post('/scores', studentAuth, async (req, res) => {
   }
 });
 
+//admin users use this endpoint to query the scores of all students, it can be filtered by name and registration number
 router.get('/scores', adminAuth, async (req, res) => {
+  const match = {};
   const sort = {};
+
+  if (req.query.registrationNumber) {
+    match.registrationNumber = req.query.registrationNumber;
+  }
+
+  if (req.query.name) {
+    match.name = req.query.name;
+  }
 
   if (req.query.sortBy) {
     const parts = req.query.sortBy.split(':');
@@ -55,9 +66,9 @@ router.get('/scores', adminAuth, async (req, res) => {
   }
 
   try {
-    const list = await Scores.find({})
-      .limit(parseInt(req.query.limit))
-      .skip(parseInt(req.query.skip));
+    const list = await Scores.find(match)
+      .limit(parseInt(req.query.limit || 10))
+      .skip(parseInt(req.query.skip || 0));
 
     res.send(list);
   } catch (e) {
@@ -65,6 +76,7 @@ router.get('/scores', adminAuth, async (req, res) => {
   }
 });
 
+//this endpoint is used by student to query his/her score
 router.get('/scores/myscore', studentAuth, async (req, res) => {
   try {
     const score = await Scores.findOne({
