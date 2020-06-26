@@ -3,7 +3,7 @@ const multer = require('multer');
 const sharp = require('sharp');
 const User = require('../models/user');
 const auth = require('../middleware/auth');
-
+const jwt = require('jsonwebtoken');
 const router = new express.Router();
 
 router.post('/users', async (req, res) => {
@@ -13,7 +13,8 @@ router.post('/users', async (req, res) => {
     await user.save();
 
     const token = await user.generateAuthToken();
-    res.status(201).send({ user, token });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.status(201).send({ user, token, expiresIn: decoded.exp });
   } catch (e) {
     res.status(400).send(e);
   }
@@ -22,11 +23,12 @@ router.post('/users', async (req, res) => {
 router.post('/users/login', async (req, res) => {
   try {
     const user = await User.findByCredentials(
-      req.body.email,
+      req.body.registrationNumber,
       req.body.password
     );
     const token = await user.generateAuthToken();
-    res.send({ user, token });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.send({ user, token, expiresIn: decoded.exp });
   } catch (e) {
     res.status(400).send();
   }

@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const userRouter = require('./routers/user');
 const adminRouter = require('./routers/admin');
 const questionRouter = require('./routers/question');
@@ -14,7 +16,9 @@ mongoose.connect(process.env.MONGODB_URL, {
 
 const port = process.env.PORT;
 
-app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
+
 app.use(userRouter);
 app.use(adminRouter);
 app.use(questionRouter);

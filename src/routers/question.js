@@ -103,7 +103,7 @@ router.get('/questions', async (req, res) => {
     const parts = req.query.sortBy.split(':');
     sort[parts[0]] = parts[1] === 'desc' ? -1 : 1;
   }
-  console.log(match);
+  //console.log(match);
   try {
     const list = await Question.find(match)
       .limit(parseInt(req.query.limit || 5))

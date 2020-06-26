@@ -82,7 +82,6 @@ router.get('/scores/myscore', studentAuth, async (req, res) => {
     const score = await Scores.findOne({
       registrationNumber: req.user.registrationNumber,
     });
-    console.log(score);
 
     res.send(score);
   } catch (e) {
