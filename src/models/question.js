@@ -6,17 +6,26 @@ const questionSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      lowercase: true,
     },
     question: {
       type: String,
       required: true,
       trim: true,
     },
-    choices: [String],
-    correctAnswer: { type: String, required: true, trim: true },
+    choices: [{ type: String, trim: true }],
+    correctAnswer: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     year: { type: Number },
-    topicName: { type: String, required: true, trim: true },
+    topicName: { type: String, trim: true, lowercase: true },
+    questionImage: {
+      type: Buffer,
+    },
   },
+
   {
     timestamps: true,
   }

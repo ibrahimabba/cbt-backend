@@ -1,13 +1,38 @@
 const express = require('express');
+const multer = require('multer');
+const sharp = require('sharp');
 const Question = require('../models/question');
 const adminAuth = require('../middleware/adminAuth');
 const studentAuth = require('../middleware/auth');
 const router = new express.Router();
 
-
 //admin users can create new questions
-router.post('/questions', adminAuth, async (req, res) => {
-  const question = new Question(req.body);
+const upload = multer({
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|JPG)$/)) {
+      return cb(new Error('Please upload an image'));
+    }
+
+    cb(undefined, true);
+  },
+});
+router.post('/questions', upload.single('questionImage'), async (req, res) => {
+  let questionImage;
+  if (req.file?.buffer) {
+    questionImage = req.file.buffer;
+  }
+
+  const data = {
+    questionImage,
+    correctAnswer: req.body.correctAnswer,
+    choices: req.body.choices,
+    question: req.body.question,
+    subjectName: req.body.subjectName,
+    year: req.body.year,
+    topicName: req.body.topicName,
+  };
+
+  const question = new Question(data);
 
   try {
     await question.save();
