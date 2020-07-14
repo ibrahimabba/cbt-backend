@@ -44,7 +44,8 @@ Format:<br>
 * test
 
 `<scope>` should be something specific to the commit change.
-Example of a commit message: `feature(logo): add logo to the toolbar[finishes #45]`<br>
+Example of a commit message:
+`feature(logo): add logo to the toolbar[finishes #45]`<br>
 Read more [here](https://github.com/andela/bestpractices/wiki/Git-naming-conventions-and-best-practices)
 
 ### Recommended Git Workflow
@@ -52,6 +53,3 @@ Read more [here](https://github.com/andela/bestpractices/wiki/Git-naming-convent
 You are required to create a separate branch using the naming convention above for each change you made and then merge
 into the develop branch.<br>
 [here](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) is a good guide to getting yourself familiar with the git workflow.
-
-
-
