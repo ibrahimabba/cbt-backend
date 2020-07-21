@@ -13,7 +13,6 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       unique: true,
-      required: true,
       trim: true,
       lowercase: true,
       validate(value) {
@@ -22,16 +21,15 @@ const userSchema = new mongoose.Schema(
         }
       },
     },
-    registrationNumber: {
+    phoneNumber: {
       type: String,
       required: true,
-      trim: true,
       unique: true,
     },
     password: {
       type: String,
       required: true,
-      minlength: 7,
+      minlength: 5,
       trim: true,
       validate(value) {
         if (value.toLowerCase().includes('password')) {
@@ -79,8 +77,8 @@ userSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
-userSchema.statics.findByCredentials = async (registrationNumber, password) => {
-  const user = await User.findOne({ registrationNumber });
+userSchema.statics.findByCredentials = async (phoneNumber, password) => {
+  const user = await User.findOne({ phoneNumber });
 
   if (!user) {
     throw new Error('Unable to login');
