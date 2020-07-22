@@ -9,6 +9,7 @@ const questionRouter = require('./routers/question');
 const scoreRouter = require('./routers/studentScores');
 
 mongoose.connect(process.env.MONGODB_URL, {
+  useUnifiedTopology: true,
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
