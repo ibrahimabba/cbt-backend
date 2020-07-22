@@ -2,28 +2,33 @@ const mongoose = require('mongoose');
 
 const questionSchema = new mongoose.Schema(
   {
-    subjectName: {
+    subject: {
       type: String,
       required: true,
       trim: true,
       lowercase: true,
     },
-    question: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    choices: [{ type: String, trim: true }],
-    correctAnswer: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+    topic: { type: String, trim: true, lowercase: true },
     year: { type: Number },
-    topicName: { type: String, trim: true, lowercase: true },
+    instruction: { type: String, trim: true, lowercase: true },
     questionImage: {
       type: Buffer,
     },
+    questions: [
+      {
+        question: {
+          type: String,
+          required: true,
+          trim: false,
+        },
+        choices: [{ type: String, trim: true }],
+        correctAnswer: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+      },
+    ],
   },
 
   {
