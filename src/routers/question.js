@@ -18,7 +18,7 @@ const upload = multer({
 });
 router.post('/questions', upload.single('questionImage'), async (req, res) => {
   let questionImage;
-  if (req.file?.buffer) {
+  if (req.file.buffer) {
     questionImage = req.file.buffer;
   }
 
