@@ -18,7 +18,7 @@ const upload = multer({
 });
 router.post('/questions', upload.single('questionImage'), async (req, res) => {
   let questionImage;
-  if (req.file?.buffer) {
+  if (req.file && req.file.buffer) {
     questionImage = req.file.buffer;
   }
 
@@ -37,7 +37,7 @@ router.post('/questions', upload.single('questionImage'), async (req, res) => {
     await question.save();
     res.status(201).send(question);
   } catch (e) {
-    res.status(400).send(e);``
+    res.status(400).send(e);
   }
 });
 
@@ -123,10 +123,10 @@ router.get('/questions', async (req, res) => {
     match.year = req.query.year;
   }
 
-  if (req.query.sortBy) {
-    const parts = req.query.sortBy.split(':');
-    sort[parts[0]] = parts[1] === 'desc' ? -1 : 1;
-  }
+  // if (req.query.sortBy) {
+  //   const parts = req.query.sortBy.split(':');
+  //   sort[parts[0]] = parts[1] === 'desc' ? -1 : 1;
+  // }
   //console.log(match);
   try {
     const list = await Question.find(match)
